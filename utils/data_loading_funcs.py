@@ -24,7 +24,7 @@ def array_normalize(input_array):
 def fuse_images(img_ref, img_folat, alpha=0.4):
     """
     """
-    mask = (img_folat > 5).astype(np.float32)
+    mask = (img_folat > 5).astype(float)
     # print(alpha)
     mask[mask > 0.5] = alpha
     mask_comp = 1.0 - mask
@@ -76,7 +76,7 @@ def construct_matrix(params, initial_transform=None):
 # Angles in degree version
 def decompose_matrix_degree(trans_matrix):
     eus = tfms.euler_from_matrix(trans_matrix[:3, :3])
-    eus = np.asarray(eus, dtype=np.float) / np.pi * 180.0
+    eus = np.asarray(eus, dtype=float) / np.pi * 180.0
     params = np.asarray([trans_matrix[0, 3],
                         trans_matrix[1, 3],
                         trans_matrix[2, 3],
@@ -85,7 +85,7 @@ def decompose_matrix_degree(trans_matrix):
 
 def construct_matrix_degree(params, initial_transform=None):
     if not params is np.array:
-        params = np.asarray(params, dtype=np.float)
+        params = np.asarray(params, dtype=float)
 
     radians = params[3:] / 180.0 * np.pi
     mat = tfms.euler_matrix(radians[0], radians[1], radians[2], 'sxyz')

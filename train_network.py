@@ -148,24 +148,24 @@ class MR_TRUS_4D(Dataset):
             # files, so we will use random validation samples in this demo.
             # if status == 'val':
             #     base_mat = np.loadtxt('mats_forVal/Case{:04}_mat{}.txt'.format(index,init_no))
-        elif self.initialization == 'random_uniform':
-            #generate samples with random SRE in a certain range (e.g. [0-20] or [0-8])
-            # if you are provided with ground truth segmentation, calculate
-            # the randomized base_TRE (Target Registration Error):
-            # base_TRE = evaluator.evaluate_transform(base_mat)
+        # elif self.initialization == 'random_uniform':
+        #     #generate samples with random SRE in a certain range (e.g. [0-20] or [0-8])
+        #     # if you are provided with ground truth segmentation, calculate
+        #     # the randomized base_TRE (Target Registration Error):
+        #     # base_TRE = evaluator.evaluate_transform(base_mat)
 
 
-            base_mat, params_rand = generate_random_transform(gt_mat)
-            base_TRE = evaluator.evaluate_transform(base_mat)
-            uniform_target_TRE = np.random.uniform(0, 20, 1)[0]
-            scale_ratio = uniform_target_TRE / base_TRE
-            params_rand = params_rand * scale_ratio
-            base_mat = load_func.construct_matrix_degree(params=params_rand,
-                                                         initial_transform=gt_mat)
+        #     base_mat, params_rand = generate_random_transform(gt_mat)
+        #     base_TRE = evaluator.evaluate_transform(base_mat)
+        #     uniform_target_TRE = np.random.uniform(0, 20, 1)[0]
+        #     scale_ratio = uniform_target_TRE / base_TRE
+        #     params_rand = params_rand * scale_ratio
+        #     base_mat = load_func.construct_matrix_degree(params=params_rand,
+        #                                                  initial_transform=gt_mat)
 
-        else:
-            print('!' * 10 + ' Initialization mode <{}> not supported!'.format(self.initialization))
-            return
+        # else:
+        #     print('!' * 10 + ' Initialization mode <{}> not supported!'.format(self.initialization))
+        #     return
 
         """loading MR and US images. In our experiments, we read images from mhd files and resample them with MR segmentation."""
         sample4D = np.zeros((2, 32, 96, 96), dtype=np.ubyte)
@@ -346,8 +346,10 @@ def train_model(model, criterion, optimizer, scheduler, fn_save, num_epochs=25):
 if __name__ == '__main__':
 
     data_dir = 'sample'
-    results_dir = 'results'
 
+    results_dir = 'results'
+    if not path.exists(results_dir):
+        os.makedirs(results_dir)
 
     init_mode = args.init_mode
     network_type = args.network_type
